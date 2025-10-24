@@ -27,19 +27,24 @@ class ChartController extends Controller
     {
         $request->validate([
             'chart_type' => 'required|in:pie,bar,line',
-            'file' => 'required|file|mimes:xlsx,xls,csv',
             'title' => 'nullable|string|max:255',
         ]);
 
-        $file = $request->file('file');
-        $filename = Str::random(10) . '_' . time() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs('uploads', $filename);
-
-        $rows = [];
-        if (in_array($file->getClientOriginalExtension(), ['xlsx', 'xls'])) {
-            $rows = Excel::toArray([], $file)[0] ?? [];
+        if ($request->has('table_data')) {
+            $request->validate(['table_data' => 'required|json']);
+            $rows = json_decode($request->table_data, true);
         } else {
-            $rows = array_map('str_getcsv', file($file->getRealPath()));
+            $request->validate(['file' => 'required|file|mimes:xlsx,xls,csv']);
+            $file = $request->file('file');
+            $filename = Str::random(10) . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('uploads', $filename);
+
+            $rows = [];
+            if (in_array($file->getClientOriginalExtension(), ['xlsx', 'xls'])) {
+                $rows = Excel::toArray([], $file)[0] ?? [];
+            } else {
+                $rows = array_map('str_getcsv', file($file->getRealPath()));
+            }
         }
 
         $rows = array_filter($rows, fn($r) => array_filter($r, fn($v) => $v !== null && $v !== ''));
@@ -51,7 +56,7 @@ class ChartController extends Controller
             'title' => $request->title ?: ucfirst($request->chart_type) . ' Chart',
             'chart_type' => $request->chart_type,
             'data' => $parsed,
-            'file_path' => $path,
+            'file_path' => isset($path) ? $path : null,
         ]);
 
         return redirect()->route('charts.show', $chart->id)

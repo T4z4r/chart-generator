@@ -3,25 +3,96 @@
 @section('content')
 <div class="container py-4">
 
-    <form action="{{ route('charts.upload') }}" method="POST" enctype="multipart/form-data" class="row g-3 mb-4">
-        @csrf
-        <div class="col-md-3">
-            <select name="chart_type" class="form-select" required>
-                <option value="pie">Pie</option>
-                <option value="bar">Bar</option>
-                <option value="line">Line</option>
-            </select>
+    <ul class="nav nav-tabs mb-4" id="chartTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload" type="button" role="tab">Upload File</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="manual-tab" data-bs-toggle="tab" data-bs-target="#manual" type="button" role="tab">Enter Data Manually</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="chartTabContent">
+        <div class="tab-pane fade show active" id="upload" role="tabpanel">
+            <form action="{{ route('charts.upload') }}" method="POST" enctype="multipart/form-data" class="row g-3 mb-4">
+                @csrf
+                <div class="col-md-3">
+                    <select name="chart_type" class="form-select" required>
+                        <option value="pie">Pie</option>
+                        <option value="bar">Bar</option>
+                        <option value="line">Line</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="title" placeholder="Chart title" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <input type="file" name="file" class="form-control" required>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary w-100">Upload & Generate</button>
+                </div>
+            </form>
         </div>
-        <div class="col-md-3">
-            <input type="text" name="title" placeholder="Chart title" class="form-control">
+
+        <div class="tab-pane fade" id="manual" role="tabpanel">
+            <form action="{{ route('charts.upload') }}" method="POST" class="mb-4">
+                @csrf
+                <div class="row g-3 mb-3">
+                    <div class="col-md-3">
+                        <select name="chart_type" class="form-select" required>
+                            <option value="pie">Pie</option>
+                            <option value="bar">Bar</option>
+                            <option value="line">Line</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="title" placeholder="Chart title" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-outline-primary" id="addRow">Add Row</button>
+                        <button type="button" class="btn btn-outline-danger" id="removeRow">Remove Row</button>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-outline-primary" id="addCol">Add Column</button>
+                        <button type="button" class="btn btn-outline-danger" id="removeCol">Remove Column</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>Label</th>
+                                <th>Series 1</th>
+                                <th>Series 2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td contenteditable="true">Category 1</td>
+                                <td contenteditable="true">10</td>
+                                <td contenteditable="true">20</td>
+                            </tr>
+                            <tr>
+                                <td contenteditable="true">Category 2</td>
+                                <td contenteditable="true">15</td>
+                                <td contenteditable="true">25</td>
+                            </tr>
+                            <tr>
+                                <td contenteditable="true">Category 3</td>
+                                <td contenteditable="true">20</td>
+                                <td contenteditable="true">30</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <input type="hidden" name="table_data" id="tableData">
+                <button type="submit" class="btn btn-primary">Generate Chart</button>
+            </form>
         </div>
-        <div class="col-md-3">
-            <input type="file" name="file" class="form-control" required>
-        </div>
-        <div class="col-md-3">
-            <button class="btn btn-primary w-100">Upload & Generate</button>
-        </div>
-    </form>
+    </div>
 
     <p><strong>Download Templates:</strong>
         <a href="{{ route('charts.template','pie') }}" class="btn btn-outline-secondary btn-sm">Pie</a>
@@ -45,4 +116,89 @@
         @endforelse
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const table = document.getElementById('dataTable');
+    const tbody = table.querySelector('tbody');
+    const thead = table.querySelector('thead tr');
+    const tableDataInput = document.getElementById('tableData');
+
+    function updateTableData() {
+        const data = [];
+        const headers = Array.from(thead.querySelectorAll('th')).map(th => th.textContent.trim());
+        data.push(headers);
+
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach(row => {
+            const rowData = Array.from(row.querySelectorAll('td')).map(td => td.textContent.trim());
+            data.push(rowData);
+        });
+
+        tableDataInput.value = JSON.stringify(data);
+    }
+
+    // Add row
+    document.getElementById('addRow').addEventListener('click', function() {
+        const rowCount = tbody.querySelectorAll('tr').length;
+        const colCount = thead.querySelectorAll('th').length;
+        const newRow = document.createElement('tr');
+        for (let i = 0; i < colCount; i++) {
+            const td = document.createElement('td');
+            td.contentEditable = 'true';
+            td.textContent = i === 0 ? `Category ${rowCount + 1}` : '0';
+            newRow.appendChild(td);
+        }
+        tbody.appendChild(newRow);
+        updateTableData();
+    });
+
+    // Remove row
+    document.getElementById('removeRow').addEventListener('click', function() {
+        if (tbody.querySelectorAll('tr').length > 1) {
+            tbody.lastElementChild.remove();
+            updateTableData();
+        }
+    });
+
+    // Add column
+    document.getElementById('addCol').addEventListener('click', function() {
+        const colCount = thead.querySelectorAll('th').length;
+        const header = document.createElement('th');
+        header.textContent = `Series ${colCount}`;
+        thead.appendChild(header);
+
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach(row => {
+            const td = document.createElement('td');
+            td.contentEditable = 'true';
+            td.textContent = '0';
+            row.appendChild(td);
+        });
+        updateTableData();
+    });
+
+    // Remove column
+    document.getElementById('removeCol').addEventListener('click', function() {
+        if (thead.querySelectorAll('th').length > 1) {
+            const thIndex = thead.querySelectorAll('th').length - 1;
+            thead.querySelectorAll('th')[thIndex].remove();
+
+            const rows = tbody.querySelectorAll('tr');
+            rows.forEach(row => {
+                row.querySelectorAll('td')[thIndex].remove();
+            });
+            updateTableData();
+        }
+    });
+
+    // Update data on edit
+    table.addEventListener('input', updateTableData);
+
+    // Initial update
+    updateTableData();
+});
+</script>
 @endsection
