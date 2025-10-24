@@ -13,6 +13,9 @@
                     <option value="pie" {{ $chart->chart_type == 'pie' ? 'selected' : '' }}>Pie</option>
                     <option value="bar" {{ $chart->chart_type == 'bar' ? 'selected' : '' }}>Bar</option>
                     <option value="line" {{ $chart->chart_type == 'line' ? 'selected' : '' }}>Line</option>
+                    <option value="doughnut" {{ $chart->chart_type == 'doughnut' ? 'selected' : '' }}>Doughnut</option>
+                    <option value="area" {{ $chart->chart_type == 'area' ? 'selected' : '' }}>Area</option>
+                    <option value="radar" {{ $chart->chart_type == 'radar' ? 'selected' : '' }}>Radar</option>
                 </select>
             </div>
             <div class="col-md-3">
@@ -33,7 +36,7 @@
                 <thead>
                     <tr>
                         <th>Label</th>
-                        @if($chart->chart_type == 'pie')
+                        @if(in_array($chart->chart_type, ['pie', 'doughnut']))
                             <th>Value</th>
                         @else
                             @foreach($chart->data['datasets'] as $dataset)
@@ -51,7 +54,7 @@
                     @for($i = 0; $i < $maxRows; $i++)
                         <tr>
                             <td contenteditable="true">{{ $labels[$i] ?? 'Category ' . ($i + 1) }}</td>
-                            @if($chart->chart_type == 'pie')
+                            @if(in_array($chart->chart_type, ['pie', 'doughnut']))
                                 <td contenteditable="true">{{ $datasets[0]['data'][$i] ?? 0 }}</td>
                             @else
                                 @foreach($datasets as $dataset)

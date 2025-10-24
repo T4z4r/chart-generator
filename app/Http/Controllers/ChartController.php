@@ -26,7 +26,7 @@ class ChartController extends Controller
     public function upload(Request $request)
     {
         $request->validate([
-            'chart_type' => 'required|in:pie,bar,line',
+            'chart_type' => 'required|in:pie,bar,line,doughnut,area,radar',
             'title' => 'nullable|string|max:255',
         ]);
 
@@ -51,6 +51,10 @@ class ChartController extends Controller
 
         $parsed = $this->parseRows($request->chart_type, $rows);
 
+        if ($request->chart_type === 'area') {
+            $parsed['options'] = ['datasets' => ['fill' => true]];
+        }
+
         $chart = Chart::create([
             'user_id' => auth()->id(),
             'title' => $request->title ?: ucfirst($request->chart_type) . ' Chart',
@@ -68,7 +72,7 @@ class ChartController extends Controller
         $rows = array_values($rows);
         if (empty($rows)) return ['labels' => [], 'datasets' => []];
 
-        if ($type === 'pie') {
+        if (in_array($type, ['pie', 'doughnut'])) {
             $labels = [];
             $values = [];
             foreach ($rows as $r) {
@@ -78,7 +82,7 @@ class ChartController extends Controller
             return ['labels' => $labels, 'datasets' => [['data' => $values]]];
         }
 
-        // For bar/line charts
+        // For bar/line/area/radar charts
         $header = array_map('strval', $rows[0]);
         $labels = [];
         $series = [];
@@ -109,7 +113,7 @@ class ChartController extends Controller
     public function update(Request $request, Chart $chart)
     {
         $request->validate([
-            'chart_type' => 'required|in:pie,bar,line',
+            'chart_type' => 'required|in:pie,bar,line,doughnut,area,radar',
             'title' => 'nullable|string|max:255',
             'table_data' => 'required|json',
         ]);
@@ -118,6 +122,10 @@ class ChartController extends Controller
         $rows = array_filter($rows, fn($r) => array_filter($r, fn($v) => $v !== null && $v !== ''));
 
         $parsed = $this->parseRows($request->chart_type, $rows);
+
+        if ($request->chart_type === 'area') {
+            $parsed['options'] = ['datasets' => ['fill' => true]];
+        }
 
         $chart->update([
             'title' => $request->title ?: ucfirst($request->chart_type) . ' Chart',

@@ -29,9 +29,23 @@
             });
         @endif
         const chartData = @json($chart->data);
-        const type = '{{ $chart->chart_type }}';
+        const originalType = '{{ $chart->chart_type }}';
+        const type = originalType === 'area' ? 'line' : originalType;
 
         const ctx = document.getElementById('chartCanvas').getContext('2d');
+
+        @php
+        $defaultOptions = [
+            'responsive' => true,
+            'plugins' => [
+                'legend' => ['position' => 'top'],
+                'title' => ['display' => false]
+            ]
+        ];
+        $chartOptions = array_merge($defaultOptions, $chart->data['options'] ?? []);
+        @endphp
+
+        const chartOptions = @json($chartOptions);
 
         const chart = new Chart(ctx, {
             type: type,
@@ -45,16 +59,10 @@
                         '#f6c23e', '#e74a3b', '#858796'
                     ],
                     borderWidth: 1,
-                    fill: type === 'line' ? false : true
+                    fill: originalType === 'area' ? true : (type === 'line' ? false : true)
                 }))
             },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { position: 'top' },
-                    title: { display: false }
-                }
-            }
+            options: chartOptions
         });
 
         document.getElementById('downloadImage').addEventListener('click', function() {

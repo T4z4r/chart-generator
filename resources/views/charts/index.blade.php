@@ -88,6 +88,9 @@
                             <option value="pie">Pie</option>
                             <option value="bar">Bar</option>
                             <option value="line">Line</option>
+                            <option value="doughnut">Doughnut</option>
+                            <option value="area">Area</option>
+                            <option value="radar">Radar</option>
                         </select>
                     </div>
                     <div class="col-md-3">
@@ -145,6 +148,9 @@
                         <option value="pie">Pie</option>
                         <option value="bar">Bar</option>
                         <option value="line">Line</option>
+                        <option value="doughnut">Doughnut</option>
+                        <option value="area">Area</option>
+                        <option value="radar">Radar</option>
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -164,6 +170,9 @@
         <a href="{{ route('charts.template','pie') }}" class="btn btn-outline-secondary btn-sm">Pie</a>
         <a href="{{ route('charts.template','bar') }}" class="btn btn-outline-secondary btn-sm">Bar</a>
         <a href="{{ route('charts.template','line') }}" class="btn btn-outline-secondary btn-sm">Line</a>
+        <a href="{{ route('charts.template','doughnut') }}" class="btn btn-outline-secondary btn-sm">Doughnut</a>
+        <a href="{{ route('charts.template','area') }}" class="btn btn-outline-secondary btn-sm">Area</a>
+        <a href="{{ route('charts.template','radar') }}" class="btn btn-outline-secondary btn-sm">Radar</a>
     </p>
 
     <div class="row mt-4">
