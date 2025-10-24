@@ -11,6 +11,31 @@
         <div id="chartCanvas" class="mx-auto"></div>
     @endif
 
+    <!-- Chart Data Table -->
+    <div class="mt-4">
+        <h4>Chart Data</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Label</th>
+                    @foreach($chart->data['datasets'] as $dataset)
+                        <th>{{ $dataset['label'] ?? 'Series ' . ($loop->index + 1) }}</th>
+                    @endforeach
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($chart->data['labels'] as $index => $label)
+                    <tr>
+                        <td>{{ $label }}</td>
+                        @foreach($chart->data['datasets'] as $dataset)
+                            <td>{{ $dataset['data'][$index] ?? '' }}</td>
+                        @endforeach
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
     <div class="mt-4">
         <button class="btn btn-success" id="downloadImage">Download Chart as Image</button>
         <a href="{{ route('charts.index') }}" class="btn btn-outline-secondary">Back</a>
