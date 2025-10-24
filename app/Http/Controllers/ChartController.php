@@ -159,4 +159,33 @@ class ChartController extends Controller
         return redirect()->route('charts.index')
             ->with('success', 'Chart deleted successfully!');
     }
+
+    public function downloadChartData(Chart $chart)
+    {
+        $data = $chart->data;
+        $labels = $data['labels'];
+        $datasets = $data['datasets'];
+
+        // Prepare data for Excel
+        $exportData = [];
+        $headers = ['Label'];
+        foreach ($datasets as $dataset) {
+            $headers[] = $dataset['label'] ?? 'Series ' . (array_search($dataset, $datasets) + 1);
+        }
+        $exportData[] = $headers;
+
+        foreach ($labels as $index => $label) {
+            $row = [$label];
+            foreach ($datasets as $dataset) {
+                $row[] = $dataset['data'][$index] ?? '';
+            }
+            $exportData[] = $row;
+        }
+
+        return Excel::download(new class($exportData) implements \Maatwebsite\Excel\Concerns\FromArray {
+            private $data;
+            public function __construct($data) { $this->data = $data; }
+            public function array(): array { return $this->data; }
+        }, Str::slug($chart->title ?: 'chart') . '_data.xlsx');
+    }
 }

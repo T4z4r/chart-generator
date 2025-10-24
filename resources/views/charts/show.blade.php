@@ -38,6 +38,7 @@
 
     <div class="mt-4">
         <button class="btn btn-success" id="downloadImage">Download Chart as Image</button>
+        <a href="{{ route('charts.download', $chart) }}" class="btn btn-primary">Download Data as Excel</a>
         <a href="{{ route('charts.index') }}" class="btn btn-outline-secondary">Back</a>
     </div>
 </div>

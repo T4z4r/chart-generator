@@ -11,6 +11,7 @@ Route::get('/charts/{chart}', [ChartController::class, 'show'])->name('charts.sh
 Route::get('/charts/{chart}/edit', [ChartController::class, 'edit'])->name('charts.edit');
 Route::put('/charts/{chart}', [ChartController::class, 'update'])->name('charts.update');
 Route::delete('/charts/{chart}', [ChartController::class, 'destroy'])->name('charts.destroy');
+Route::get('/charts/{chart}/download', [ChartController::class, 'downloadChartData'])->name('charts.download');
 
 // Route::get('/', function () {
 //     return view('welcome');
