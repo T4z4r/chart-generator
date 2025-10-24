@@ -176,10 +176,10 @@
                     <div class="d-flex gap-2">
                         <a href="{{ route('charts.show', $chart->id) }}" class="btn btn-sm btn-primary">View</a>
                         <a href="{{ route('charts.edit', $chart->id) }}" class="btn btn-sm btn-secondary">Edit</a>
-                        <form action="{{ route('charts.destroy', $chart->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this chart?');">
+                        <form action="{{ route('charts.destroy', $chart->id) }}" method="POST" class="d-inline delete-form">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            <button type="button" class="btn btn-sm btn-danger delete-btn" data-chart-title="{{ $chart->title }}">Delete</button>
                         </form>
                     </div>
                 </div>
@@ -193,8 +193,42 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Handle delete confirmation with SweetAlert
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.closest('.delete-form');
+            const chartTitle = this.getAttribute('data-chart-title');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: `You want to delete "${chartTitle}"? This action cannot be undone.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+
+    // Show success alert if there's a success message
+    @if(session('success'))
+        Swal.fire({
+            title: 'Success!',
+            text: '{{ session('success') }}',
+            icon: 'success',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    @endif
     const table = document.getElementById('dataTable');
     const tbody = table.querySelector('tbody');
     const thead = table.querySelector('thead tr');
