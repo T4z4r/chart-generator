@@ -173,7 +173,15 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ $chart->title }}</h5>
                     <p class="card-text">Type: {{ ucfirst($chart->chart_type) }}</p>
-                    <a href="{{ route('charts.show', $chart->id) }}" class="btn btn-sm btn-primary">View Chart</a>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('charts.show', $chart->id) }}" class="btn btn-sm btn-primary">View</a>
+                        <a href="{{ route('charts.edit', $chart->id) }}" class="btn btn-sm btn-secondary">Edit</a>
+                        <form action="{{ route('charts.destroy', $chart->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this chart?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

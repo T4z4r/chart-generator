@@ -100,4 +100,43 @@ class ChartController extends Controller
     {
         return view('charts.show', compact('chart'));
     }
+
+    public function edit(Chart $chart)
+    {
+        return view('charts.edit', compact('chart'));
+    }
+
+    public function update(Request $request, Chart $chart)
+    {
+        $request->validate([
+            'chart_type' => 'required|in:pie,bar,line',
+            'title' => 'nullable|string|max:255',
+            'table_data' => 'required|json',
+        ]);
+
+        $rows = json_decode($request->table_data, true);
+        $rows = array_filter($rows, fn($r) => array_filter($r, fn($v) => $v !== null && $v !== ''));
+
+        $parsed = $this->parseRows($request->chart_type, $rows);
+
+        $chart->update([
+            'title' => $request->title ?: ucfirst($request->chart_type) . ' Chart',
+            'chart_type' => $request->chart_type,
+            'data' => $parsed,
+        ]);
+
+        return redirect()->route('charts.show', $chart->id)
+            ->with('success', 'Chart updated successfully!');
+    }
+
+    public function destroy(Chart $chart)
+    {
+        if ($chart->file_path && Storage::exists($chart->file_path)) {
+            Storage::delete($chart->file_path);
+        }
+        $chart->delete();
+
+        return redirect()->route('charts.index')
+            ->with('success', 'Chart deleted successfully!');
+    }
 }
