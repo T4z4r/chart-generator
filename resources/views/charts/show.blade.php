@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-5 text-center">
+<div class="container py-4 text-center">
     <h3>{{ $chart->title }}</h3>
     <p class="text-muted">Type: {{ ucfirst($chart->chart_type) }}</p>
 

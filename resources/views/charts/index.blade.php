@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-5">
-    <h2 class="mb-4">Chart Generator</h2>
+<div class="container py-4">
 
     <form action="{{ route('charts.upload') }}" method="POST" enctype="multipart/form-data" class="row g-3 mb-4">
         @csrf
