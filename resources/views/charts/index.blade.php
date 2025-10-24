@@ -3,36 +3,80 @@
 @section('content')
 <div class="container py-4">
 
-    <ul class="nav nav-tabs mb-4" id="chartTab" role="tablist">
+    <ul class="nav nav-tabs custom-tabs mb-4" id="chartTab" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload" type="button" role="tab">Upload File</button>
+            <button class="nav-link active d-flex align-items-center" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab">
+                <i class="fas fa-home me-2"></i>Home
+            </button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="manual-tab" data-bs-toggle="tab" data-bs-target="#manual" type="button" role="tab">Enter Data Manually</button>
+            <button class="nav-link d-flex align-items-center" id="manual-tab" data-bs-toggle="tab" data-bs-target="#manual" type="button" role="tab">
+                <i class="fas fa-edit me-2"></i>Manual Entry
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link d-flex align-items-center" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload" type="button" role="tab">
+                <i class="fas fa-upload me-2"></i>Upload File
+            </button>
         </li>
     </ul>
 
     <div class="tab-content" id="chartTabContent">
-        <div class="tab-pane fade show active" id="upload" role="tabpanel">
-            <form action="{{ route('charts.upload') }}" method="POST" enctype="multipart/form-data" class="row g-3 mb-4">
-                @csrf
-                <div class="col-md-3">
-                    <select name="chart_type" class="form-select" required>
-                        <option value="pie">Pie</option>
-                        <option value="bar">Bar</option>
-                        <option value="line">Line</option>
-                    </select>
+        <div class="tab-pane fade show active" id="home" role="tabpanel">
+            <div class="hero-section text-white py-5 mb-5 rounded">
+                <div class="container text-center">
+                    <img src="/logo.svg" alt="ChartForge Logo" width="120" height="120" class="mb-4">
+                    <h1 class="display-4">Welcome to ChartForge</h1>
+                    <p class="lead">Transform your data into beautiful, interactive charts in seconds.</p>
+                    <p class="mb-4">Whether you're a data analyst, student, or business professional, ChartForge makes chart creation simple and fun.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="#manual" class="btn btn-light btn-lg" data-bs-toggle="tab">Get Started</a>
+                        <a href="#upload" class="btn btn-outline-light btn-lg" data-bs-toggle="tab">Upload Data</a>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <input type="text" name="title" placeholder="Chart title" class="form-control">
+            </div>
+
+            <div class="container">
+                <h2 class="text-center mb-4">Why Choose ChartForge?</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="feature-card text-center p-4 border rounded shadow-sm h-100">
+                            <div class="mb-3">
+                                <i class="fas fa-edit fa-3x text-primary"></i>
+                            </div>
+                            <h5>Easy Data Entry</h5>
+                            <p>Enter your data directly into an editable table that works like Excel. No need for complex spreadsheets.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card text-center p-4 border rounded shadow-sm h-100">
+                            <div class="mb-3">
+                                <i class="fas fa-upload fa-3x text-primary"></i>
+                            </div>
+                            <h5>File Upload</h5>
+                            <p>Upload Excel or CSV files for larger datasets. Supports multiple chart types seamlessly.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card text-center p-4 border rounded shadow-sm h-100">
+                            <div class="mb-3">
+                                <i class="fas fa-chart-bar fa-3x text-primary"></i>
+                            </div>
+                            <h5>Multiple Chart Types</h5>
+                            <p>Create Pie, Bar, and Line charts with customizable colors and styles.</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <input type="file" name="file" class="form-control" required>
+
+                <div class="text-center mt-5">
+                    <h3>Ready to Create Your First Chart?</h3>
+                    <p>Choose how you'd like to input your data and start visualizing!</p>
+                    <div class="d-flex justify-content-center gap-3 mt-3">
+                        <button class="btn btn-primary" data-bs-toggle="tab" data-bs-target="#manual">Manual Entry</button>
+                        <button class="btn btn-outline-primary" data-bs-toggle="tab" data-bs-target="#upload">File Upload</button>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <button class="btn btn-primary w-100">Upload & Generate</button>
-                </div>
-            </form>
+            </div>
         </div>
 
         <div class="tab-pane fade" id="manual" role="tabpanel">
@@ -90,6 +134,28 @@
 
                 <input type="hidden" name="table_data" id="tableData">
                 <button type="submit" class="btn btn-primary">Generate Chart</button>
+            </form>
+        </div>
+
+        <div class="tab-pane fade" id="upload" role="tabpanel">
+            <form action="{{ route('charts.upload') }}" method="POST" enctype="multipart/form-data" class="row g-3 mb-4">
+                @csrf
+                <div class="col-md-3">
+                    <select name="chart_type" class="form-select" required>
+                        <option value="pie">Pie</option>
+                        <option value="bar">Bar</option>
+                        <option value="line">Line</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="title" placeholder="Chart title" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <input type="file" name="file" class="form-control" required>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary w-100">Upload & Generate</button>
+                </div>
             </form>
         </div>
     </div>

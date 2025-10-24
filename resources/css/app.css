@@ -54,3 +54,53 @@ header h1 {
 .form-control, .form-select {
     border-radius: 8px;
 }
+
+/* Home tab enhancements */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.feature-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card i {
+    opacity: 0.8;
+}
+
+.feature-card:hover i {
+    opacity: 1;
+}
+
+/* Custom tab styling */
+.custom-tabs .nav-link {
+    border: none;
+    border-radius: 10px 10px 0 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: #495057;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-right: 5px;
+}
+
+.custom-tabs .nav-link:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    color: #212529;
+    transform: translateY(-2px);
+}
+
+.custom-tabs .nav-link.active {
+    background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+    color: white;
+    box-shadow: 0 4px 8px rgba(78, 115, 223, 0.3);
+}
+
+.custom-tabs .nav-link i {
+    font-size: 1.1em;
+}
