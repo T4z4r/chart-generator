@@ -94,6 +94,14 @@
                         </select>
                     </div>
                     <div class="col-md-3">
+                        <select name="package_type" class="form-select" required>
+                            <option value="chartjs">Chart.js</option>
+                            <option value="apex">ApexCharts</option>
+                            <option value="highchart">Highcharts</option>
+                            <option value="echart">ECharts</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
                         <input type="text" name="title" placeholder="Chart title" class="form-control">
                     </div>
                     <div class="col-md-3">
@@ -135,6 +143,11 @@
                     </table>
                 </div>
 
+                <div class="mb-3">
+                    <label class="form-label">Dataset Colors (comma-separated hex colors, e.g., #ff0000,#00ff00)</label>
+                    <input type="text" name="colors" class="form-control">
+                </div>
+
                 <input type="hidden" name="table_data" id="tableData">
                 <button type="submit" class="btn btn-primary">Generate Chart</button>
             </form>
@@ -151,6 +164,14 @@
                         <option value="doughnut">Doughnut</option>
                         <option value="area">Area</option>
                         <option value="radar">Radar</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="package_type" class="form-select" required>
+                        <option value="chartjs">Chart.js</option>
+                        <option value="apex">ApexCharts</option>
+                        <option value="highchart">Highcharts</option>
+                        <option value="echart">ECharts</option>
                     </select>
                 </div>
                 <div class="col-md-3">

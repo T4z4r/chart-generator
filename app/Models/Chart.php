@@ -13,13 +13,16 @@ class Chart extends Model
         'user_id',
         'title',
         'chart_type',
+        'package_type',
         'data',
         'options',
+        'colors',
         'file_path',
     ];
 
     protected $casts = [
         'data' => 'array',
         'options' => 'array',
+        'colors' => 'array',
     ];
 }

@@ -19,6 +19,14 @@
                 </select>
             </div>
             <div class="col-md-3">
+                <select name="package_type" class="form-select" required>
+                    <option value="chartjs" {{ $chart->package_type == 'chartjs' ? 'selected' : '' }}>Chart.js</option>
+                    <option value="apex" {{ $chart->package_type == 'apex' ? 'selected' : '' }}>ApexCharts</option>
+                    <option value="highchart" {{ $chart->package_type == 'highchart' ? 'selected' : '' }}>Highcharts</option>
+                    <option value="echart" {{ $chart->package_type == 'echart' ? 'selected' : '' }}>ECharts</option>
+                </select>
+            </div>
+            <div class="col-md-3">
                 <input type="text" name="title" placeholder="Chart title" class="form-control" value="{{ $chart->title }}">
             </div>
             <div class="col-md-3">
@@ -65,6 +73,11 @@
                     @endfor
                 </tbody>
             </table>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Dataset Colors (comma-separated hex colors, e.g., #ff0000,#00ff00)</label>
+            <input type="text" name="colors" class="form-control" value="{{ is_array($chart->colors) ? implode(',', $chart->colors) : '' }}">
         </div>
 
         <input type="hidden" name="table_data" id="tableData">

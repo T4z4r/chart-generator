@@ -28,6 +28,8 @@ class ChartController extends Controller
         $request->validate([
             'chart_type' => 'required|in:pie,bar,line,doughnut,area,radar',
             'title' => 'nullable|string|max:255',
+            'package_type' => 'required|in:chartjs,apex,highchart,echart',
+            'colors' => 'nullable|string',
         ]);
 
         if ($request->has('table_data')) {
@@ -55,11 +57,15 @@ class ChartController extends Controller
             $parsed['options'] = ['datasets' => ['fill' => true]];
         }
 
+        $colors = $request->colors ? array_map('trim', explode(',', $request->colors)) : null;
+
         $chart = Chart::create([
             'user_id' => auth()->id(),
             'title' => $request->title ?: ucfirst($request->chart_type) . ' Chart',
             'chart_type' => $request->chart_type,
+            'package_type' => $request->package_type,
             'data' => $parsed,
+            'colors' => $colors,
             'file_path' => isset($path) ? $path : null,
         ]);
 
@@ -115,6 +121,8 @@ class ChartController extends Controller
         $request->validate([
             'chart_type' => 'required|in:pie,bar,line,doughnut,area,radar',
             'title' => 'nullable|string|max:255',
+            'package_type' => 'required|in:chartjs,apex,highchart,echart',
+            'colors' => 'nullable|string',
             'table_data' => 'required|json',
         ]);
 
@@ -127,10 +135,14 @@ class ChartController extends Controller
             $parsed['options'] = ['datasets' => ['fill' => true]];
         }
 
+        $colors = $request->colors ? array_map('trim', explode(',', $request->colors)) : null;
+
         $chart->update([
             'title' => $request->title ?: ucfirst($request->chart_type) . ' Chart',
             'chart_type' => $request->chart_type,
+            'package_type' => $request->package_type,
             'data' => $parsed,
+            'colors' => $colors,
         ]);
 
         return redirect()->route('charts.show', $chart->id)
