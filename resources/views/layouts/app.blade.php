@@ -9,7 +9,7 @@
     @vite('resources/css/app.css')
 </head>
 <body class="bg-light d-flex flex-column min-vh-100">
-    <header class="bg-white shadow-sm mb-4">
+    <header class="shadow-sm mb-4">
         <div class="container d-flex align-items-center py-3">
             <img src="/logo.svg" alt="ChartForge Logo" width="40" height="40" class="me-3">
             <h1 class="h4 mb-0">ChartForge</h1>

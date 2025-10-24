@@ -1,4 +1,4 @@
-# Chart Generator
+# ChartForge
 
 A Laravel-based web application for generating, managing, and customizing charts. This application allows users to create, edit, view, and customize various types of charts with ease.
 

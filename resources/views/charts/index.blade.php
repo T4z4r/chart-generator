@@ -42,7 +42,7 @@
                     <div class="col-md-4">
                         <div class="feature-card text-center p-4 border rounded shadow-sm h-100">
                             <div class="mb-3">
-                                <i class="fas fa-edit fa-3x text-primary"></i>
+                                <i class="fas fa-edit fa-3x text-purple-800"></i>
                             </div>
                             <h5>Easy Data Entry</h5>
                             <p>Enter your data directly into an editable table that works like Excel. No need for complex spreadsheets.</p>
@@ -51,7 +51,7 @@
                     <div class="col-md-4">
                         <div class="feature-card text-center p-4 border rounded shadow-sm h-100">
                             <div class="mb-3">
-                                <i class="fas fa-upload fa-3x text-primary"></i>
+                                <i class="fas fa-upload fa-3x text-purple-800"></i>
                             </div>
                             <h5>File Upload</h5>
                             <p>Upload Excel or CSV files for larger datasets. Supports multiple chart types seamlessly.</p>
@@ -60,7 +60,7 @@
                     <div class="col-md-4">
                         <div class="feature-card text-center p-4 border rounded shadow-sm h-100">
                             <div class="mb-3">
-                                <i class="fas fa-chart-bar fa-3x text-primary"></i>
+                                <i class="fas fa-chart-bar fa-3x text-purple-800"></i>
                             </div>
                             <h5>Multiple Chart Types</h5>
                             <p>Create Pie, Bar, and Line charts with customizable colors and styles.</p>
