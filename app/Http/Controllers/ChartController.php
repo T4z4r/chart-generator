@@ -18,7 +18,7 @@ class ChartController extends Controller
 
     public function downloadTemplate($type)
     {
-        $path = storage_path('app/templates/' . $type . '_template.xlsx');
+        $path = storage_path('app/public/templates/' . $type . '_template.xlsx');
         if (!file_exists($path)) abort(404, 'Template not found.');
         return response()->download($path, $type . '_template.xlsx');
     }
